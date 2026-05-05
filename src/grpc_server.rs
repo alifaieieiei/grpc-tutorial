@@ -1,10 +1,16 @@
 use tonic::{transport::Server, Request, Response, Status};
+use tokio::sync::mpsc;
+use tokio_stream::wrappers::ReceiverStream;
+use tokio::sync::mpsc::{Receiver, Sender};
 
 pub mod services {
     tonic::include_proto!("services");
 }
 
-use services::{payment_service_server::{PaymentService, PaymentServiceServer}, PaymentRequest, PaymentResponse};
+use services::{
+    payment_service_server::{PaymentService, PaymentServiceServer}, PaymentRequest, PaymentResponse,
+    transaction_service_server::{TransactionService, TransactionServiceServer}, TransactionRequest, TransactionResponse,
+};
 
 #[derive(Default)]
 pub struct MyPaymentService {}
@@ -23,15 +29,12 @@ impl PaymentService for MyPaymentService {
     }
 }
 
-#[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let addr = "[::1]:50051".parse()?;
-    let payment_service = MyPaymentService::default();
+#[derive(Default)]
+pub struct MyTransactionService {}
 
-    Server::builder()
-        .add_service(PaymentServiceServer::new(payment_service))
-        .serve(addr)
-        .await?;
+#[tonic::async_trait]
+impl TransactionService for MyTransactionService {
+    type GetTransactionHistoryStream = ReceiverStream<Result<TransactionResponse, Status>>;
 
-    Ok(())
-}
+    async fn get_transaction_history(
+        &Normally I can help with things like this, but I don't seem to have access to that content. You can try again or ask me for something else.
